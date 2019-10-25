@@ -1,19 +1,44 @@
-// import * as Yup from 'yup';
-// import Appointment from '../models/Appointments';
+import * as Yup from 'yup';
+import Appointment from '../models/Appointment';
+import User from '../models/User';
 
 class AppointmentController {
   async store(req, res) {
-    // const schema = Yup.object().shape({
-    //   date: Yup.date().required,
-    //   canceled: Yup.date(),
-    //   provider_id: Yup.number().required(),
-    // });
+    const schema = Yup.object().shape({
+      provider_id: Yup.number().required(),
+      date: Yup.date().required(),
+    });
 
-    // const appointment = await Appointment.create({
-    //   user_id: req.user_id,
-    // });
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validation falis' });
+    }
 
-    return res.json();
+    const { provider_id, date } = req.body;
+
+    /**
+     *  Checj if provider_id is a provider
+     */
+
+    const isProvider = await User.findOne({
+      where: {
+        id: provider_id,
+        provider: true,
+      },
+    });
+
+    if (!isProvider) {
+      return res
+        .status(401)
+        .json({ error: 'You can only create appointments with providers' });
+    }
+
+    const appointment = await Appointment.create({
+      user_id: req.userId,
+      provider_id,
+      date,
+    });
+
+    return res.json(appointment);
   }
 }
 
