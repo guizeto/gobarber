@@ -7,7 +7,7 @@ import UserController from './app/controllers/UserController';
 import SessionsController from './app/controllers/SessionController';
 import FileController from './app/controllers/FileController';
 import ProviderController from './app/controllers/ProviderController';
-import AppointmentController from './app/controllers/Appointment';
+import AppointmentController from './app/controllers/AppointmentController';
 import ScheduleController from './app/controllers/ScheduleController';
 import NotificationController from './app/controllers/NotificationController';
 
